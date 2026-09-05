@@ -1,0 +1,66 @@
+{
+  "execution_timestamp": "2026-09-05 16:56:06.561059",
+  "warehouses_count": 60,
+  "total_records_count": 1440,
+  "selected_production_model": "Random Forest",
+  "model_accuracy": 0.934,
+  "model_macro_f1": 0.6402,
+  "shortage_detection_recall": 0.9592,
+  "shortage_detection_precision": 0.9592,
+  "comparison_table": [
+    {
+      "Model": "Random Forest",
+      "Accuracy": 0.934,
+      "Precision": 0.642,
+      "Recall": 0.6385,
+      "F1": 0.6402,
+      "Shortage_Recall": 0.9592,
+      "Shortage_F1": 0.9592,
+      "Status": "Selected (Production)",
+      "Selection_Rationale": "Empirically superior Macro F1 and critical shortage-detection recall without over-indexing on non-critical classes."
+    },
+    {
+      "Model": "Logistic Regression",
+      "Accuracy": 0.8299,
+      "Precision": 0.6476,
+      "Recall": 0.6138,
+      "F1": 0.6144,
+      "Shortage_Recall": 0.8571,
+      "Shortage_F1": 0.8984,
+      "Status": "Rejected",
+      "Selection_Rationale": "Lower overall recall or higher operational latency compared to production candidate."
+    },
+    {
+      "Model": "Decision Tree",
+      "Accuracy": 0.7674,
+      "Precision": 0.6305,
+      "Recall": 0.5353,
+      "F1": 0.578,
+      "Shortage_Recall": 0.8571,
+      "Shortage_F1": 0.8936,
+      "Status": "Rejected",
+      "Selection_Rationale": "Lower overall recall or higher operational latency compared to production candidate."
+    }
+  ],
+  "cluster_k": 3,
+  "clusters": {
+    "0": {
+      "Operational_Segment": "Cluster 0 \u2014 Balanced Operational Flow"
+    },
+    "1": {
+      "Operational_Segment": "Cluster 1 \u2014 High-Velocity Shortage Risk"
+    },
+    "2": {
+      "Operational_Segment": "Cluster 2 \u2014 Chronic Overstock Buffers"
+    }
+  },
+  "simulation_latest_month": "2024-12",
+  "shortage_units_before": 295129.0,
+  "shortage_units_after": 0.0,
+  "shortage_reduction_pct": 100.0,
+  "overstock_reduction_pct": 10.6,
+  "total_units_reallocated": 295130,
+  "holding_cost_savings": 737825.0,
+  "net_financial_benefit": 2966056.5,
+  "affected_warehouses_count": 27
+}

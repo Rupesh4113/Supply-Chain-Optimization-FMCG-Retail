@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project environment & artifacts
+.venv/
+data/raw/*.csv
+data/processed/*.csv
+models/*.joblib
+reports/figures/*.png
+
