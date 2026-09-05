@@ -219,8 +219,7 @@ __marimo__/
 
 # Project environment & artifacts
 .venv/
-data/raw/*.csv
-data/processed/*.csv
-models/*.joblib
-reports/figures/*.png
+.pytest_cache/
+.vscode/
+
 

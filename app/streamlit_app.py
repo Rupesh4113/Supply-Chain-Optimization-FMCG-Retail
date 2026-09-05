@@ -7,7 +7,14 @@ and data science decision-makers.
 """
 
 import os
+import sys
 import json
+
+# Ensure repository root is in sys.path regardless of execution environment (essential for Streamlit Cloud)
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -109,14 +116,21 @@ st.markdown("""
 @st.cache_data
 def load_data():
     """Load preprocessed and engineered dataset along with aggregated profiles."""
-    processed_path = "data/processed/fmcg_supply_chain_engineered.csv"
-    profiles_path = "data/processed/warehouse_profiles.csv"
-    metrics_path = "reports/pipeline_metrics.json"
-    recs_path = "data/processed/latest_replenishment_recommendations.csv"
+    processed_path = os.path.join(ROOT_DIR, "data", "processed", "fmcg_supply_chain_engineered.csv")
+    profiles_path = os.path.join(ROOT_DIR, "data", "processed", "warehouse_profiles.csv")
+    metrics_path = os.path.join(ROOT_DIR, "reports", "pipeline_metrics.json")
+    recs_path = os.path.join(ROOT_DIR, "data", "processed", "latest_replenishment_recommendations.csv")
     
     if not os.path.exists(processed_path):
         from src.pipeline import run_full_pipeline
-        run_full_pipeline()
+        run_full_pipeline(
+            raw_path=os.path.join(ROOT_DIR, "data", "raw", "fmcg_supply_chain_raw.csv"),
+            processed_path=processed_path,
+            profiles_path=profiles_path,
+            models_dir=os.path.join(ROOT_DIR, "models"),
+            figures_dir=os.path.join(ROOT_DIR, "reports", "figures"),
+            metrics_path=metrics_path
+        )
         
     df_engineered = pd.read_csv(processed_path)
     df_profiles = pd.read_csv(profiles_path)
@@ -137,7 +151,7 @@ def load_data():
 def load_models():
     """Load serialized model pipelines."""
     models = {}
-    model_dir = "models/"
+    model_dir = os.path.join(ROOT_DIR, "models")
     for name in ["logistic_regression", "decision_tree", "random_forest"]:
         p = os.path.join(model_dir, f"{name}_pipeline.joblib")
         if os.path.exists(p):
@@ -542,15 +556,17 @@ elif nav_selection == "🤖 Risk Prediction & ML Engine":
     col_m1, col_m2 = st.columns(2)
     with col_m1:
         st.subheader("Feature Importance (Random Forest)")
-        if os.path.exists("reports/figures/fig4_feature_importance.png"):
-            st.image("reports/figures/fig4_feature_importance.png", use_container_width=True)
+        fig_rf_path = os.path.join(ROOT_DIR, "reports", "figures", "fig4_feature_importance.png")
+        if os.path.exists(fig_rf_path):
+            st.image(fig_rf_path, use_container_width=True)
         else:
             st.info("Feature importance plot available upon pipeline execution.")
             
     with col_m2:
         st.subheader("Holdout Confusion Matrix")
-        if os.path.exists("reports/figures/fig3_confusion_matrix.png"):
-            st.image("reports/figures/fig3_confusion_matrix.png", use_container_width=True)
+        fig_cm_path = os.path.join(ROOT_DIR, "reports", "figures", "fig3_confusion_matrix.png")
+        if os.path.exists(fig_cm_path):
+            st.image(fig_cm_path, use_container_width=True)
         else:
             st.info("Confusion matrix available upon pipeline execution.")
 
@@ -684,8 +700,9 @@ elif nav_selection == "🔄 Supply Reallocation":
     
     # Impact Waterfall Visualization
     st.subheader("Network Imbalance Mitigation (Before vs. After Simulation)")
-    if os.path.exists("reports/figures/fig5_reallocation_impact.png"):
-        st.image("reports/figures/fig5_reallocation_impact.png", use_container_width=True)
+    fig_realloc_path = os.path.join(ROOT_DIR, "reports", "figures", "fig5_reallocation_impact.png")
+    if os.path.exists(fig_realloc_path):
+        st.image(fig_realloc_path, use_container_width=True)
         
     s_col1, s_col2, s_col3, s_col4 = st.columns(4)
     with s_col1:
